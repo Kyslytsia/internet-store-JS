@@ -403,7 +403,8 @@ input {
     cursor: pointer; }
   .order__table,
    .item__favourite,
-   .add-product-in-cart {
+   .add-product-in-cart,
+   .delete-product-in-cart {
     border: none;
     background: none;
     padding: 0;

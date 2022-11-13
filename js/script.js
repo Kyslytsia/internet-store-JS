@@ -416,9 +416,6 @@ if (userLogined) {
       e.preventDefault();
       const product_id = e.target.dataset.product_id;
 
-      console.log(userLogined);
-      console.log(product_id);
-
       if (product_id) {
         if (userLogined.cart.includes(parseInt(product_id))) {
           const index = userLogined.cart.findIndex(
@@ -492,7 +489,10 @@ function renderCart(user) {
       document.querySelector(`#headerShoppingCartCount`).innerText =
         userLogined.cart?.length ?? 0;
 
-      document.querySelector(`.buy-block`).innerHTML = "";
+      if (user.cart.length === 0) {
+        document.querySelector(`.buy-block`).innerHTML = "";
+      }
+
       cartTable.innerHTML = "";
       renderCart(user);
     });
