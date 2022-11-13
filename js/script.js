@@ -12,6 +12,7 @@ const testIvan = {
     { id: 5, count: 2 },
     { id: 6, count: 1 },
   ],
+  cart: [9, 18, 7],
   status: false,
 };
 
@@ -65,6 +66,7 @@ if (registrationForm) {
       status: true,
       favourites: [],
       orders: [],
+      cart: [],
     };
 
     USERS.forEach((value) => (value.status = false));
@@ -126,6 +128,10 @@ document.addEventListener("DOMContentLoaded", (e) => {
   const headerFavouritesCount = document.querySelector(
     `#headerFavouritesCount`
   );
+  const headerShoppingCart = document.querySelector(`#headerShoppingCart`);
+  const headerShoppingCartCount = document.querySelector(
+    `#headerShoppingCartCount`
+  );
   const headerLogout = document.querySelector(`#headerLogout`);
 
   if (userLogined) {
@@ -134,6 +140,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
     headerFavourites.href = `favourites.html`;
     headerFavouritesCount.innerText = userLogined.favourites?.length ?? 0;
+
+    headerShoppingCart.href = `shopping-cart.html`;
+    headerShoppingCartCount.innerHTML = userLogined.cart?.length ?? 0;
 
     userInfoEmail && (userInfoEmail.innerText = userLogined.email);
 
@@ -261,6 +270,9 @@ function renderFavourite(user) {
                           <button class="item__favourite"><img src="images/product__favourite--true.png" alt="favourite" height="20"  data-product_id="${
                             favouriteProduct.id
                           }"></button>
+                          <button class="add-product-in-cart"><img src="images/product__shopping-cart.png" data-product_id="${
+                            favouriteProduct.id
+                          }" alt="favourite" height="20" "></button>
                       </td> </tr>`;
 
     favouriteTable.appendChild(tr);
@@ -270,10 +282,10 @@ function renderFavourite(user) {
 
   favouriteButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
-      const productID = parseInt(e.target.dataset.product_id);
+      const product_id = parseInt(e.target.dataset.product_id);
 
       const index = userLogined.favourites.findIndex(
-        (value) => value === productID
+        (value) => value === product_id
       );
 
       userLogined.favourites.splice(index, 1);
@@ -332,6 +344,9 @@ if (categoriesContainer) {
             ? product.price - (product.price * product.salePercent) / 100
             : product.price
         }</span>
+        <button class="add-product-in-cart"><img src="images/product__shopping-cart.png" data-product_id="${
+          product.id
+        }" alt="favourite" height="20" "></button>
     </div>`;
 
       if (!AllProducts[category]) {
@@ -362,6 +377,7 @@ if (favouritesAll && !userLogined) {
     });
   });
 }
+
 if (favouritesAll && userLogined) {
   favouritesAll.forEach((favourite) => {
     favourite.addEventListener("click", (e) => {
@@ -388,4 +404,101 @@ if (favouritesAll && userLogined) {
       }
     });
   });
+}
+
+// CART
+// ====
+
+const addProductInCart = document.querySelectorAll(".add-product-in-cart");
+if (userLogined) {
+  addProductInCart.forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const product_id = e.target.dataset.product_id;
+
+      console.log(userLogined);
+      console.log(product_id);
+
+      if (product_id) {
+        if (userLogined.cart.includes(parseInt(product_id))) {
+          const index = userLogined.cart.findIndex(
+            (el) => el === parseInt(product_id)
+          );
+
+          userLogined.cart.splice(index, 1);
+        } else {
+          userLogined.cart.push(parseInt(product_id));
+        }
+
+        document.querySelector(`#headerShoppingCartCount`).innerText =
+          userLogined.favourites?.length ?? 0;
+
+        localStorage.setItem("users", JSON.stringify(USERS));
+        window.location.reload();
+      }
+    });
+  });
+}
+
+const cartTable = document.querySelector(`#cartTable`)?.children[2];
+
+function renderCart(user) {
+  let totalSum = [];
+
+  user.cart.forEach((el) => {
+    const productInCart = PRODUCTS.find((product) => product.id === el);
+
+    const price = productInCart.sale
+      ? productInCart.price -
+        (productInCart.price * productInCart.salePercent) / 100
+      : productInCart.price;
+
+    totalSum.push(price);
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<tr><td>
+                          <div class="item__info">
+                              <img src="images/products/${productInCart.img}.png"
+                               alt="${productInCart.title}" height="100">
+                              <div>
+                                  <p class="item__info--title">${productInCart.title}</p>
+                              </div>
+                          </div>
+                      </td>
+                      <td>$${price}</td>
+                      <td>
+                          <button class="delete-product-in-cart"><img src="images/delete.png" data-product_id="${productInCart.id}" alt="favourite" height="20" "></button>
+                      </td> </tr>`;
+
+    cartTable.appendChild(tr);
+
+    const totalPrice = document.querySelector(`.totalPrice`);
+    totalPrice.innerText =
+      `итого: ` + ` $ ` + totalSum.reduce((acc, price) => (acc += price), 0);
+  });
+
+  const deleteProductInCart = document.querySelectorAll(
+    ".delete-product-in-cart"
+  );
+
+  deleteProductInCart.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const product_id = parseInt(e.target.dataset.product_id);
+
+      const index = userLogined.cart.findIndex((value) => value === product_id);
+
+      userLogined.cart.splice(index, 1);
+      localStorage.setItem("users", JSON.stringify(USERS));
+      document.querySelector(`#headerShoppingCartCount`).innerText =
+        userLogined.cart?.length ?? 0;
+
+      document.querySelector(`.buy-block`).innerHTML = "";
+      cartTable.innerHTML = "";
+      renderCart(user);
+    });
+  });
+}
+
+if (cartTable && userLogined) {
+  renderCart(userLogined);
 }

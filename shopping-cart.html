@@ -23,7 +23,7 @@
 							<img src="images/favourite.png" alt="favourite" height="20">
 							<span class="header__shop--count" id="headerFavouritesCount">0</span>
 						</a>
-						<a href="" id="headerShoppingCart">
+						<a href="shopping-cart.html" id="headerShoppingCart">
 							<img src="images/shopping-cart.png" alt="shopping cart" height="20">
 							<span class="header__shop--count" id="headerShoppingCartCount">0</span>
 						</a>
@@ -36,49 +36,30 @@
 
 	<div class="container">
 		<div class="shoppingCart__container">
-
 			<div class="table__container">
-				<table class="order__table" id="orderTable">
-					<caption>Ordered Items</caption>
+				<table class="order__table" id="cartTable">
+					<caption>Cart Items</caption>
 					<thead>
 						<tr>
 							<th>Item Description</th>
 							<th>Price</th>
-							<th>Sale</th>
-							<th>Quantity</th>
-							<th>Total</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
-					</tbody>
+						
+		    		</tbody>
 				</table>
-			</div>
 
-			<div class="order__summary">
-				<form id="userInfo">
-					<table>
-						<caption>My Info</caption>
-						<tbody>
-							<tr>
-								<th>Name:</th>
-								<td><input type="text" value="" id="userInfoName"></td>
-							</tr>
-							<tr>
-								<th>Email:</th>
-								<td id="userInfoEmail"></td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="order__summary--btns">
-						<button class="btn" type="submit">Save changes</button>
-						<button class="btn delete__acc" type="button" id="deleteAcc">Delete account</button>
-					</div>
-				</form>
+				<div class="buy-block">
+					<button class="buy-block__btn">купить</button>
+					<div class="totalPrice"></div>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<script src="js/script.js" type="module"></script>
+	<script src="js/script.js" type='module'></script>
 </body>
 
 </html>
