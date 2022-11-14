@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     headerFavouritesCount.innerText = userLogined.favourites?.length ?? 0;
 
     headerShoppingCart.href = `shopping-cart.html`;
-    headerShoppingCartCount.innerHTML = userLogined.cart?.length ?? 0;
+    headerShoppingCartCount.innerText = userLogined.cart?.length ?? 0;
 
     userInfoEmail && (userInfoEmail.innerText = userLogined.email);
 
@@ -387,10 +387,10 @@ if (favouritesAll && userLogined) {
       if (product_id) {
         if (userLogined.favourites.includes(parseInt(product_id))) {
           const index = userLogined.favourites.findIndex(
-            (value) => value === parseInt(product_id) // строка в число
+            (value) => value === parseInt(product_id)
           );
 
-          userLogined.favourites.splice(index, 1); //удалит 1єл по index
+          userLogined.favourites.splice(index, 1);
           e.target.src = `images/product__favourite.png`;
         } else {
           userLogined.favourites.push(parseInt(product_id));
@@ -416,23 +416,20 @@ if (userLogined) {
       e.preventDefault();
       const product_id = e.target.dataset.product_id;
 
-      if (product_id) {
-        if (userLogined.cart.includes(parseInt(product_id))) {
-          const index = userLogined.cart.findIndex(
-            (el) => el === parseInt(product_id)
-          );
+      if (userLogined.cart.includes(parseInt(product_id))) {
+        const index = userLogined.cart.findIndex(
+          (el) => el === parseInt(product_id)
+        );
 
-          userLogined.cart.splice(index, 1);
-        } else {
-          userLogined.cart.push(parseInt(product_id));
-        }
-
-        document.querySelector(`#headerShoppingCartCount`).innerText =
-          userLogined.favourites?.length ?? 0;
-
-        localStorage.setItem("users", JSON.stringify(USERS));
-        window.location.reload();
+        userLogined.cart.splice(index, 1);
+      } else {
+        userLogined.cart.push(parseInt(product_id));
       }
+
+      document.querySelector(`#headerShoppingCartCount`).innerText =
+        userLogined.cart?.length ?? 0;
+
+      localStorage.setItem("users", JSON.stringify(USERS));
     });
   });
 }
@@ -474,6 +471,10 @@ function renderCart(user) {
       `итого: ` + ` $ ` + totalSum.reduce((acc, price) => (acc += price), 0);
   });
 
+  if (user.cart.length === 0) {
+    document.querySelector(`.buy-block`).innerHTML = "";
+  }
+
   const deleteProductInCart = document.querySelectorAll(
     ".delete-product-in-cart"
   );
@@ -488,10 +489,6 @@ function renderCart(user) {
       localStorage.setItem("users", JSON.stringify(USERS));
       document.querySelector(`#headerShoppingCartCount`).innerText =
         userLogined.cart?.length ?? 0;
-
-      if (user.cart.length === 0) {
-        document.querySelector(`.buy-block`).innerHTML = "";
-      }
 
       cartTable.innerHTML = "";
       renderCart(user);
