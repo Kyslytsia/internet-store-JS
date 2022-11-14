@@ -489,20 +489,22 @@ if (cartTable && userLogined) {
 }
 
 const btn = document.querySelector(`.buy-block__btn`);
-
-if (btn) {
-  btn.addEventListener("click", () => {
-    userLogined.orders.push(
-      ...userLogined.cart.map((el) => {
-        return el;
-      })
-    );
-    userLogined.cart = [];
-    localStorage.setItem("users", JSON.stringify(USERS));
-    document.querySelector(`#headerShoppingCartCount`).innerText =
-      userLogined.cart?.length ?? 0;
-    document.querySelector(`.buy-block`).innerHTML = "";
-    cartTable.innerHTML = "Благодарим за покупку";
-  });
+if (userLogined) {
+  if (btn) {
+    btn.addEventListener("click", () => {
+      userLogined.orders.push(
+        ...userLogined.cart.map((el) => {
+          return el;
+        })
+      );
+      userLogined.cart = [];
+      localStorage.setItem("users", JSON.stringify(USERS));
+      document.querySelector(`#headerShoppingCartCount`).innerText =
+        userLogined.cart?.length ?? 0;
+      document.querySelector(`.buy-block`).innerHTML = "";
+      cartTable.innerHTML = "";
+      document.querySelector(`.successful-buy`).style.display = "block";
+    });
+  }
 }
 console.log(userLogined.orders);

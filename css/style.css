@@ -461,7 +461,11 @@ input {
       border-radius: 3px;
       width: 100px;
       margin-right: 100px;
-      color: white;
-    }   
+      color: white; }
+      .successful-buy {
+        text-align: center;
+        font-size: 40px;
+        display: none;
+      }   
 
 /*# sourceMappingURL=style.css.map */
