@@ -4,6 +4,21 @@ export const USERS = DB;
 
 export const userLogined = USERS.find((user) => Boolean(user.status));
 
+const testIvan = {
+  name: "Ivan",
+  email: "testivan@gmail.com",
+  password: "123",
+  favourites: [9, 18, 7],
+  orders: [5, 6],
+  cart: [9, 18, 7],
+  status: false,
+};
+
+if (USERS.findIndex((user) => user.email === testIvan.email) < 0) {
+  USERS.push(testIvan);
+  localStorage.setItem("users", JSON.stringify(USERS));
+}
+
 // HEADER
 // ======
 
