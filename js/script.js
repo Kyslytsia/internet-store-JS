@@ -8,10 +8,7 @@ const testIvan = {
   email: "testivan@gmail.com",
   password: "123",
   favourites: [9, 18, 7],
-  orders: [
-    { id: 5, count: 2 },
-    { id: 6, count: 1 },
-  ],
+  orders: [5, 6],
   cart: [9, 18, 7],
   status: false,
 };
@@ -162,7 +159,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 const orderTable = document.querySelector(`#orderTable`);
 if (orderTable && userLogined) {
   userLogined.orders.forEach((order) => {
-    let product = PRODUCTS.find((product) => order.id === product.id);
+    let product = PRODUCTS.find((product) => product.id === order);
 
     const tr = document.createElement("tr");
     tr.innerHTML = `<tr>
@@ -181,15 +178,6 @@ if (orderTable && userLogined) {
                       <td><span class="item__sale">- ${
                         product.sale ? product.salePercent + "%" : ""
                       }</span></td>
-                      <td>${order.count}</td>
-                      <td>$${
-                        (product.price -
-                          (product.sale
-                            ? (product.price * product.salePercent) / 100
-                            : 0)) *
-                        order.count
-                      }
-                      </td>
                     </tr>`;
     orderTable.append(tr);
   });
@@ -499,3 +487,22 @@ function renderCart(user) {
 if (cartTable && userLogined) {
   renderCart(userLogined);
 }
+
+const btn = document.querySelector(`.buy-block__btn`);
+
+if (btn) {
+  btn.addEventListener("click", () => {
+    userLogined.orders.push(
+      ...userLogined.cart.map((el) => {
+        return el;
+      })
+    );
+    userLogined.cart = [];
+    localStorage.setItem("users", JSON.stringify(USERS));
+    document.querySelector(`#headerShoppingCartCount`).innerText =
+      userLogined.cart?.length ?? 0;
+    document.querySelector(`.buy-block`).innerHTML = "";
+    cartTable.innerHTML = "Благодарим за покупку";
+  });
+}
+console.log(userLogined.orders);
