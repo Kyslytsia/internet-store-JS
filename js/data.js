@@ -157,20 +157,6 @@ export const PRODUCTS = [
   },
 ];
 
-export const USERS = [
-  {
-    name: "Ivan",
-    email: "ivan@gmail.com",
-    password: "123",
-    favourites: [9, 18, 7],
-    orders: [
-      { id: 5, count: 2 },
-      { id: 6, count: 1 },
-    ],
-    status: false,
-  },
-];
-
 const getStorageUser = () => {
   const user = localStorage.getItem("users");
 
